@@ -1,11 +1,12 @@
 import { SlicePipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ProductImagePipe } from '@products/pipes/product-image.pipe';
 import { BASE_URL } from '@products/services/products.service';
 
 @Component({
   selector: 'app-product-card',
-  imports: [RouterLink, SlicePipe],
+  imports: [RouterLink, SlicePipe, ProductImagePipe, RouterLinkActive],
   templateUrl: './product-card.html',
 })
 export class ProductCard {
@@ -14,8 +15,8 @@ export class ProductCard {
     'Lorem ipsum dolor sit amet consectetur adipiscing elit euismod erat',
   );
   slug = input<string>('');
-  imageUrl = input<string>('');
-  image = computed(() => {
-    return `${BASE_URL}/files/product/${this.imageUrl()}`;
-  });
+  imageUrl = input<string | string[] | undefined>('');
+  // image = computed(() => {
+  //   return `${BASE_URL}/files/product/${this.imageUrl()}`;
+  // });
 }

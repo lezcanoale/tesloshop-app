@@ -17,7 +17,10 @@ export class AuthService {
   private http = inject(HttpClient);
 
   checkStatusResource = rxResource({
-    stream: () => this.checkStatus(),
+    stream: () => {
+      console.log('entra');
+      return this.checkStatus();
+    },
   });
 
   authStatus = computed<AuthStatus>(() => {
@@ -54,12 +57,12 @@ export class AuthService {
 
   checkStatus(): Observable<boolean> {
     const token = localStorage.getItem('token');
-    if (token!) {
+    if (!token) {
       this.logout();
       return of(false);
     }
     return this.http
-      .get<AuthResponse>(`${BASE_URL}/auth/checkstatus`, {
+      .get<AuthResponse>(`${BASE_URL}/auth/check-status`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

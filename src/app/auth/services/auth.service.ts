@@ -18,7 +18,6 @@ export class AuthService {
 
   checkStatusResource = rxResource({
     stream: () => {
-      console.log('entra');
       return this.checkStatus();
     },
   });
@@ -44,6 +43,22 @@ export class AuthService {
       .post<AuthResponse>(`${BASE_URL}/auth/login`, {
         email,
         password,
+      })
+      .pipe(
+        map((resp) => {
+          return this.handleAuthSuccess(resp);
+        }),
+        catchError((error) => {
+          return this.handleAuthError();
+        }),
+      );
+  }
+  register(email: string, password: string, fullName: string): Observable<boolean> {
+    return this.http
+      .post<AuthResponse>(`${BASE_URL}/auth/register`, {
+        email,
+        password,
+        fullName,
       })
       .pipe(
         map((resp) => {

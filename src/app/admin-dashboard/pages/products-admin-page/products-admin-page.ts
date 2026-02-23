@@ -1,9 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { ProductTable } from '@products/components/product-table/product-table';
+import { ProductService } from '@products/services/products.service';
+import { PaginationComponent } from '@shared/components/pagination/pagination';
+import { PaginationService } from '@shared/components/pagination/pagination.service';
 
 @Component({
   selector: 'app-products-admin-page',
-  imports: [ProductTable],
+  imports: [ProductTable, PaginationComponent],
   templateUrl: './products-admin-page.html',
 })
-export class ProductsAdminPage {}
+export class ProductsAdminPage {
+  productsService = inject(ProductService);
+  paginationService = inject(PaginationService);
+  productsPerPage = signal(10);
+
+  productsResource = rxResource({
+    params: () => ({
+      page: this.paginationService.currentPage()! - 1,
+      limit: this.productsPerPage(),
+    }),
+    stream: ({ params }) => {
+      return this.productsService.getProducts({
+        offset: params.page ? params.page * 9 : 0,
+        limit: params.limit,
+      });
+    },
+  });
+}

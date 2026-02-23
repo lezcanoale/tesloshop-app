@@ -31,7 +31,8 @@
               </div>
             </div>
             <div>
-              <div class="font-bold" [routerLink]="['/admin/products', product.id]">{{product.title}}</div>
+              <div class="font-bold hover:text-accent transition-colors duration-300"
+                [routerLink]="['/admin/products', product.id]">{{product.title}}</div>
               <div class="text-sm opacity-50">{{product.sizes.join(", ")}}</div>
             </div>
           </div>

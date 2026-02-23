@@ -37,7 +37,7 @@ export class AuthService {
   //Las computed properties sirven para solo lectura, para que no se modifiquen los valores privados
   user = computed<User | null>(() => this._user());
   token = computed(this._token);
-
+  isAdmin = computed(() => this._user()?.roles.includes('admin') ?? false);
   login(email: string, password: string): Observable<boolean> {
     return this.http
       .post<AuthResponse>(`${BASE_URL}/auth/login`, {
